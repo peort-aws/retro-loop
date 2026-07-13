@@ -1,0 +1,20 @@
+{
+  "conversation_id": "example-demo-session",
+  "timestamp": "2026-07-13T16:00:00+00:00",
+  "suggestions": [
+    {
+      "type": "steering_update",
+      "severity": "high",
+      "title": "Calendar search treated as proof of absence",
+      "evidence": "Agent: 'No meeting found on your calendar for Wednesday'... User: 'the meeting IS there — you searched by title only and missed it'",
+      "suggestion": "Add rule: calendar_search is title-only and cannot verify attendee presence. Never assert a meeting doesn't exist based on a title search alone. Cross-reference calendar_view data by attendee name instead."
+    },
+    {
+      "type": "skill_improvement",
+      "severity": "medium",
+      "title": "Retry loop: email_search called 4x with same query",
+      "evidence": "Tool pattern repeated 4 times: email_search with query='meeting notes'",
+      "suggestion": "Add a circuit breaker — after 2 failed searches with the same terms, try alternative search terms or ask the user for clarification instead of retrying."
+    }
+  ]
+}
