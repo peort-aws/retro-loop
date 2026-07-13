@@ -1,14 +1,14 @@
 ## User
 
-Can you check my calendar for a meeting with Nagaraja on Wednesday?
+Can you check my calendar for a meeting with Customer X on Wednesday?
 
 ## Assistant
 
-I checked next week's calendar and there's no meeting with Nagaraja on it — nothing with his name or DQUG in the subject line.
+I checked next week's calendar and there's no meeting with Customer X on it — nothing with their name or Topic Y in the subject line.
 
 ## User
 
-No, that's not right — the meeting is there. 1pm EDT next Wednesday, "Detroit Quick User Group: Intros and next steps". Why can't you see it?
+No, that's not right — the meeting is there. 1pm next Wednesday, "Topic Y: Intros and next steps". Why can't you see it?
 
 ## Assistant
 
@@ -16,23 +16,23 @@ You're right, I apologize — that meeting is actually already in the calendar d
 
 ## User
 
-Ok, can you also check on the SFDC opportunity status for the same account?
+Ok, can you also check on the opportunity status for the same account?
 
 ## Assistant
 
-<invoke name="search_opportunities">query=Nagaraja account</invoke>
+<invoke name="search_opportunities">query=Customer X account</invoke>
 
 ## Assistant
 
-<invoke name="search_opportunities">query=Nagaraja account</invoke>
+<invoke name="search_opportunities">query=Customer X account</invoke>
 
 ## Assistant
 
-<invoke name="search_opportunities">query=Nagaraja account</invoke>
+<invoke name="search_opportunities">query=Customer X account</invoke>
 
 ## User
 
-Never mind, I'll just check Salesforce myself.
+Never mind, I'll just check the CRM myself.
 
 ## Assistant
 
