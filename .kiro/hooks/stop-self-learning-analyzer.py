@@ -26,6 +26,9 @@ def analyze_transcript(transcript_path: str) -> list[dict]:
     """
     Analyze a conversation transcript for improvement signals.
 
+    Expects transcript_path to already be validated (exists, readable,
+    within size limits) by the caller.
+
     Returns a list of structured suggestions, each with:
     - type: skill_improvement | steering_update | new_skill
     - severity: high | medium | low
@@ -33,7 +36,7 @@ def analyze_transcript(transcript_path: str) -> list[dict]:
     - evidence: Relevant transcript excerpt
     - suggestion: Proposed fix
     """
-    transcript = Path(transcript_path).read_text(encoding="utf-8")
+    transcript = Path(transcript_path).read_text(encoding="utf-8", errors="replace")
     turns = parse_turns(transcript)
 
     suggestions = []
@@ -155,16 +158,40 @@ def find_workarounds(turns: list[dict]) -> list[dict]:
 def main():
     """Entry point — called by Kiro after conversation ends."""
     transcript_path = os.environ.get("KIRO_TRANSCRIPT_PATH")
-    if not transcript_path or not Path(transcript_path).exists():
+    if not transcript_path:
+        return
+
+    path = Path(transcript_path)
+    try:
+        resolved = path.resolve(strict=True)
+    except (OSError, RuntimeError):
+        # Missing file, broken symlink, or path resolution failure
+        return
+
+    if not resolved.is_file():
+        return
+
+    # Guard against unexpectedly large transcripts (cap at 10 MB)
+    MAX_TRANSCRIPT_BYTES = 10 * 1024 * 1024
+    try:
+        if resolved.stat().st_size > MAX_TRANSCRIPT_BYTES:
+            print(f"[retro] Skipping transcript — exceeds {MAX_TRANSCRIPT_BYTES // (1024 * 1024)}MB cap")
+            return
+    except OSError:
+        return
+
+    try:
+        transcript = resolved.read_text(encoding="utf-8", errors="replace")
+    except OSError as e:
+        print(f"[retro] Could not read transcript: {e}")
         return
 
     # Skip very short conversations (< 3 turns)
-    transcript = Path(transcript_path).read_text(encoding="utf-8")
     turn_count = transcript.count("## Human") + transcript.count("## User")
     if turn_count < 3:
         return
 
-    suggestions = analyze_transcript(transcript_path)
+    suggestions = analyze_transcript(str(resolved))
     if not suggestions:
         return
 

@@ -102,6 +102,14 @@ After 3+ months of running this pattern:
 - Python 3.10+
 - No external dependencies
 
+## Testing
+
+```bash
+python3 test_analyzer.py -v
+```
+
+Smoke tests cover transcript parsing, correction detection, retry-loop detection, and workaround detection.
+
 ## License
 
-MIT
+[MIT](./LICENSE)

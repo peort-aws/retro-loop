@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+*.egg-info/
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Environment / secrets
+.env
+.env.*
+
+# Kiro runtime (keep hooks + example, ignore real runtime state)
+.kiro/logs/
+.kiro/retro/pending/*.json
+!.kiro/retro/pending/example-demo-session.json
