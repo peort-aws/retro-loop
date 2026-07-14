@@ -30,7 +30,7 @@ def analyze_transcript(transcript_path: str) -> list[dict]:
     within size limits) by the caller.
 
     Returns a list of structured suggestions, each with:
-    - type: skill_improvement | steering_update | new_skill
+    - type: correction | retry_loop | workaround
     - severity: high | medium | low
     - title: Short description
     - evidence: Relevant transcript excerpt
@@ -92,7 +92,7 @@ def find_user_corrections(turns: list[dict]) -> list[dict]:
                 prev_assistant = turns[i - 1]["content"][:200]
 
             suggestions.append({
-                "type": "steering_update",
+                "type": "correction",
                 "severity": "high",
                 "title": f"User correction at turn {i}",
                 "evidence": f"Agent: {prev_assistant}...\nUser: {turn['content'][:200]}",
@@ -120,7 +120,7 @@ def find_retry_loops(turns: list[dict]) -> list[dict]:
         for call, count in counts.items():
             if count >= 3:
                 suggestions.append({
-                    "type": "skill_improvement",
+                    "type": "retry_loop",
                     "severity": "medium",
                     "title": f"Retry loop: same tool called {count}x",
                     "evidence": f"Tool pattern repeated {count} times: {call[:60]}",
@@ -145,7 +145,7 @@ def find_workarounds(turns: list[dict]) -> list[dict]:
 
         if any(signal in content_lower for signal in workaround_signals):
             suggestions.append({
-                "type": "new_skill",
+                "type": "workaround",
                 "severity": "medium",
                 "title": f"User workaround at turn {i}",
                 "evidence": turn["content"][:200],

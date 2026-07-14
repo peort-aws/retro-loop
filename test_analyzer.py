@@ -42,7 +42,7 @@ class TestFindUserCorrections(unittest.TestCase):
         suggestions = analyzer.find_user_corrections(turns)
         self.assertEqual(len(suggestions), 1)
         self.assertEqual(suggestions[0]["severity"], "high")
-        self.assertEqual(suggestions[0]["type"], "steering_update")
+        self.assertEqual(suggestions[0]["type"], "correction")
 
     def test_no_false_positive_on_normal_turn(self):
         turns = [
@@ -79,7 +79,7 @@ class TestFindWorkarounds(unittest.TestCase):
         ]
         suggestions = analyzer.find_workarounds(turns)
         self.assertEqual(len(suggestions), 1)
-        self.assertEqual(suggestions[0]["type"], "new_skill")
+        self.assertEqual(suggestions[0]["type"], "workaround")
 
 
 if __name__ == "__main__":
